@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data Admin</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">Data Admin</h2>
+        <a href="create.html" class="btn btn-primary mb-3">+ Tambah Admin</a>
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="adminTable">
+                <!-- Data admin akan dimasukkan di sini -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("http://localhost:5000/admin")
+                .then(response => response.json())
+                .then(data => {
+                    let tableContent = "";
+                    data.forEach(admin => {
+                        const passwordStars = '*'.repeat(admin.password.length); // Enkripsi password tampilan
+
+                        tableContent += `
+                    <tr>
+                        <td>${admin.admin_id}</td>
+                        <td>${admin.name}</td>
+                        <td>${admin.email}</td>
+                        <td>${passwordStars}</td>
+                        <td>
+                            <a href="detail.html?id=${admin.admin_id}" class="btn btn-info btn-sm">Detail</a>
+                            <a href="update.html?id=${admin.admin_id}" class="btn btn-warning btn-sm">Edit</a>
+                            <button class="btn btn-danger btn-sm" onclick="deleteAdmin('${admin.admin_id}')">Hapus</button>
+                        </td>                       
+                    </tr>
+                    `;
+                    });
+
+                    // Masukkan ke dalam tabel
+                    document.getElementById("adminTable").innerHTML = tableContent;
+                })
+                .catch(error => console.error("Terjadi kesalahan:", error));
+        });
+        function deleteAdmin(id) {
+            if (confirm("Apakah Anda yakin ingin menghapus admin ini?")) {
+                fetch(`http://localhost:5000/admin/${id}`, { method: "DELETE" })
+                    .then(response => response.text())
+                    .then(result => {
+                        alert("Admin berhasil dihapus!");
+                        location.reload();
+                    })
+                    .catch(error => console.error("Terjadi kesalahan:", error));
+            }
+        }
+    </script> 
+</body>
+</html>

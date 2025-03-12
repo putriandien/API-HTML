@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tambah Admin</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">Tambah Admin</h2>
+        <form id="createAdmin">
+            <div class="mb-3">
+                <label>Nama:</label>
+                <input type="text" class="form-control form-control-sm" id="nama" required>
+            </div>
+            <div class="mb-3">
+                <label>Email:</label>
+                <input type="email" class="form-control form-control-sm" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label>Password:</label>
+                <div class="input-group input-group-sm">
+                    <input type="password" class="form-control" id="password" required>
+                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">👁️</button>
+                </div>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-success btn-sm">Simpan</button>
+                <a href="read.html" class="btn btn-secondary btn-sm">Batal</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("createAdmin").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const formData = {
+                name: document.getElementById("nama").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                password: document.getElementById("password").value.trim()
+            };
+
+            fetch("http://localhost:5000/admin", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.text())
+            .then(result => {
+                alert(result);
+                window.location.href = "read.html";
+            });
+        });
+
+        // Fitur toggle password
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordField = document.getElementById("password");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                this.textContent = "🙈"; // Ubah ikon
+            } else {
+                passwordField.type = "password";
+                this.textContent = "👁️"; // Ubah ikon kembali
+            }
+        });
+    </script>
+
+</body>
+</html>

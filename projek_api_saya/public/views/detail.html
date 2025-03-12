@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="widtd=device-widtd, initial-scale=1">
+    <title>Detail Admin</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <h2 class="text-center">Detail Admin</h2>
+        <table class="table table-bordered">
+            <tr>
+                <td>ID: </td>
+                <td id="admin_id"></td>
+            </tr>
+            <tr>
+                <td>Nama: </td>
+                <td id="name"></td>
+            </tr>
+            <tr>
+                <td>Email: </td>
+                <td id="email"></td>
+            </tr>
+            <tr>
+                <td>Password: </td>
+                <td id="password"></td>
+            </tr>
+        </table>
+        <a href="read.html" class="btn btn-secondary w-100">Kembali</a>
+    </div>
+
+    <script>
+        // Fungsi untuk mengambil parameter dari URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Ambil ID dari URL
+        const adminId = getQueryParam("id");
+
+        // Cek apakah adminId ada
+        if (!adminId) {
+            alert("ID admin tidak ditemukan!");
+            window.location.href = "read.html"; // Redirect jika tidak ada ID
+        } else {
+            // Fetch data admin berdasarkan ID
+            fetch(`http://localhost:5000/admin/${adminId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        document.getElementById("admin_id").textContent = data[0].admin_id;
+                        document.getElementById("name").textContent = data[0].name;
+                        document.getElementById("email").textContent = data[0].email;
+                        document.getElementById("password").textContent = data[0].password;
+
+                    }
+                })
+                .catch(error => {
+                    console.error("Terjadi kesalahan:", error);
+                    alert("Gagal mengambil data admin.");
+                    window.location.href = "read.html";
+                });
+        }
+    </script>
+
+</body>
+
+</html>

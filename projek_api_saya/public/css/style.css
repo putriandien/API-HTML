@@ -1,0 +1,69 @@
+/* Mengatur tampilan umum */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+/* Container utama */
+.container {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+/* Tabel */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Header tabel */
+.table thead {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+/* Tombol */
+.btn {
+    border-radius: 5px;
+}
+
+/* Tombol Edit */
+.btn-warning {
+    background-color: #ffc107;
+    border: none;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+/* Tombol Hapus */
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Form */
+form {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+form .btn {
+    width: 100%;
+}

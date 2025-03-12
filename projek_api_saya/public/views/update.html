@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Admin</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h2>Edit Admin</h2>
+        <form id="updateAdmin">
+            <div class="mb-3">
+                <label>ID:</label>
+                <input type="text" id="id" class="form-control" readonly>
+            </div>
+            <div class="mb-3">
+                <label>Nama:</label>
+                <input type="text" id="nama" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Email:</label>
+                <input type="email" id="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Password:</label>
+                <input type="text" id="password" class="form-control">
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-warning">Update</button> <br><br>
+                <a href="read.html" class="btn btn-secondary">Batal</a>
+            </div>
+    </div>
+    </form>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+    
+        document.addEventListener("DOMContentLoaded", function () {
+            const adminId = getQueryParam("id");
+    
+            if (!adminId) {
+                alert("ID admin tidak ditemukan!");
+                window.location.href = "read.html";
+            } else {
+                fetch(`http://localhost:5000/admin/${adminId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            document.getElementById("id").value = data[0].admin_id;
+                            document.getElementById("nama").value = data[0].name;
+                            document.getElementById("email").value = data[0].email;
+                            document.getElementById("password").value = data[0].password;
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Terjadi kesalahan:", error);
+                        alert("Gagal mengambil data admin.");
+                        window.location.href = "read.html";
+                    });
+            }
+    
+            // Tambahkan event listener untuk mencegah edit ID
+            document.getElementById("id").addEventListener("click", function () {
+                alert("ID tidak dapat diedit!");
+            });
+    
+            document.getElementById("id").addEventListener("keydown", function (event) {
+                event.preventDefault(); // Mencegah pengguna mengetik
+            });
+    
+            document.getElementById("updateAdmin").addEventListener("submit", function (event) {
+                event.preventDefault();
+    
+                const updatedData = {
+                    name: document.getElementById("nama").value,
+                    email: document.getElementById("email").value,
+                    password: document.getElementById("password").value
+                };
+    
+                fetch(`http://localhost:5000/admin/${adminId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(updatedData)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Gagal memperbarui admin.");
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        alert("Admin berhasil diperbarui!");
+                        window.location.href = "read.html";
+                    })
+                    .catch(error => {
+                        alert("Terjadi kesalahan: " + error.message);
+                    });
+            });
+        });
+    </script>
+    
+</body>
+
+</html>
